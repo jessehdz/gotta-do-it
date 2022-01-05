@@ -43,6 +43,8 @@ app.post('/', (req, res) =>{
     res.redirect("/");
 })
 
-app.listen(3000, function(){
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, function(){
     console.log("todo-list running on server 3000");
 });
