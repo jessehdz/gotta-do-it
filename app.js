@@ -13,6 +13,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
 var items = ["Buy butter", "Gym", "Code"];
+var workItems = [];
 
 app.get("/", (req, res) => {
     var today = new Date();
@@ -35,6 +36,16 @@ app.get("/", (req, res) => {
     
     // res.send("Hello");
 });
+
+app.get("/work", (req, res) => {
+    res.render("list", {listTitle: "Work List", newItems: workItems });
+});
+
+app.post("/work", (req, res) => {
+    let item = req.body.newItem;
+    workItems.push(item);
+    res.redirect("/work");
+})
 
 app.post('/', (req, res) =>{
     
