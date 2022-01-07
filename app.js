@@ -38,7 +38,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/work", (req, res) => {
-    res.render("list", {listTitle: "Work List", newItems: workItems });
+    res.render("list", {listTitle: "Work List", newListItems: workItems });
 });
 
 app.post("/work", (req, res) => {
