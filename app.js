@@ -28,7 +28,7 @@ app.get("/", (req, res) => {
 
 
     res.render("list", {
-        kindOfDay: day,
+        listTitle: day,
         newListItems: items
     });
 
@@ -38,7 +38,9 @@ app.get("/", (req, res) => {
 });
 
 app.get("/work", (req, res) => {
-    res.render("list", {listTitle: "Work List", newListItems: workItems });
+    res.render("list", {
+        listTitle: "Work List", 
+        newListItems: workItems });
 });
 
 app.post("/work", (req, res) => {
