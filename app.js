@@ -15,6 +15,7 @@ app.use(express.static("public"));
 var items = ["Buy butter", "Gym", "Code"];
 var workItems = [];
 
+//home page
 app.get("/", (req, res) => {
     var today = new Date();
     
@@ -37,6 +38,22 @@ app.get("/", (req, res) => {
     // res.send("Hello");
 });
 
+app.post('/', (req, res) =>{
+    
+    let item = req.body.newItem;
+    let listName = req.body.list;
+
+    if (listName === "Work List") {
+        workItems.push(item);
+        res.redirect("/work");
+    } else {
+        items.push(item);
+        res.redirect("/");
+    }
+
+})
+
+//work list page
 app.get("/work", (req, res) => {
     res.render("list", {
         listTitle: "Work List", 
@@ -49,13 +66,8 @@ app.post("/work", (req, res) => {
     res.redirect("/work");
 })
 
-app.post('/', (req, res) =>{
-    
-    var item = req.body.newItem;
-    items.push(item);
-    res.redirect("/");
-})
 
+//PORT setup for Heroku app setup
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, function(){
