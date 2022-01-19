@@ -29,11 +29,31 @@ const Item = mongoose.model("Item", itemsSchema);
 
 //create document to add to collection
 const item1 = new Item ({
-        name: 'Welcome to your todolist'
+    name: 'Welcome to your todolist'
 });
 
+const item2 = new Item ({
+    name: 'Hit the + button to add a new item'
+});
+
+const item3 = new Item ({
+    name: '<-- Hit this to delete an item'
+});
+
+//array of items
+const defaultItems = [item1, item2, item3];
+
+//insert many in collection
+// Item.insertMany(defaultItems, function(err, item) {
+//     if (err) {
+//         console.log(err);
+//     } else {
+//         console.log(item);
+//     }
+// })
+
 //delete documents in collection
-// Item.deleteMany({_id: ""}, function(err){
+// Item.deleteMany({_id: "61e792352f75f3953b4d3d91"}, function(err){
 //     if(err){
 //         console.log(err);
 //     } else {
@@ -41,6 +61,14 @@ const item1 = new Item ({
 //     }
 // })
 
+//read/render items already added to list
+Item.find({}, function(err, results){
+    if (err){
+        console.log(err)
+    } else {
+        console.log(results)
+    }
+})
 
 // item.save();
 
