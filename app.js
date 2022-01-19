@@ -43,14 +43,7 @@ const item3 = new Item ({
 //array of items
 const defaultItems = [item1, item2, item3];
 
-//insert many in collection
-// Item.insertMany(defaultItems, function(err, item) {
-//     if (err) {
-//         console.log(err);
-//     } else {
-//         console.log(item);
-//     }
-// })
+
 
 //delete documents in collection
 // Item.deleteMany({_id: "61e792352f75f3953b4d3d91"}, function(err){
@@ -62,13 +55,13 @@ const defaultItems = [item1, item2, item3];
 // })
 
 //read/render items already added to list
-Item.find({}, function(err, results){
-    if (err){
-        console.log(err)
-    } else {
-        console.log(results)
-    }
-})
+// Item.find({}, function(err, results){
+//     if (err){
+//         console.log(err)
+//     } else {
+//         console.log(results)
+//     }
+// })
 
 // item.save();
 
@@ -78,13 +71,30 @@ var workItems = [];
 
 //home page
 app.get("/", (req, res) => {
-    
+    //read/render items already added to list
+    Item.find({}, function(err, results){
+    if (results.length === 0){
+        // insert default items in collection
+        Item.insertMany(defaultItems, function(err, item) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(item);
+            }
+        })
+    } else {
+        res.render("list", {
+            listTitle: day,
+            newListItems: results
+        });
+        // console.log(results)
+    }
+    });
+
+
     let day = date.getDate();
 
-    res.render("list", {
-        listTitle: day,
-        newListItems: items
-    });
+    
 
     console.log(day);
     
