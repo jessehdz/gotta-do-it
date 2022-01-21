@@ -45,14 +45,7 @@ const defaultItems = [item1, item2, item3];
 
 
 
-//delete documents in collection
-// Item.deleteMany({_id: "61e792352f75f3953b4d3d91"}, function(err){
-//     if(err){
-//         console.log(err);
-//     } else {
-//         console.log("Succesfully removed items from the todo list");
-//     }
-// })
+
 
 //read/render items already added to list
 // Item.find({}, function(err, results){
@@ -79,7 +72,7 @@ app.get("/", (req, res) => {
             if (err) {
                 console.log(err);
             } else {
-                console.log("Succesfully saved default items to DB.");
+                console.log("Succesfully added default items to DB.");
             }
         });
         res.redirect("/");
@@ -124,6 +117,24 @@ app.post("/work", (req, res) => {
     res.redirect("/work");
 })
 
+//deleted items page
+app.post("/delete", function(req, res) {
+    const deletedID = req.body.checkBox;
+    
+    //delete documents in collection
+    Item.findByIdAndRemove({_id: deletedID }, function(err){
+        if(err){
+            console.log(err);
+        } else {
+            console.log("Succesfully removed item " + deletedID + " from the todo list");
+            res.redirect("/");
+        }
+    })
+    
+    
+
+    console.log(deletedID);
+});
 
 //PORT setup for Heroku app setup
 const PORT = process.env.PORT || 3000;
