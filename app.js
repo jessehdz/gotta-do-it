@@ -79,9 +79,10 @@ app.get("/", (req, res) => {
             if (err) {
                 console.log(err);
             } else {
-                console.log(item);
+                console.log("Succesfully saved default items to DB.");
             }
-        })
+        });
+        res.redirect("/");
     } else {
         res.render("list", {
             listTitle: day,
@@ -91,29 +92,23 @@ app.get("/", (req, res) => {
     }
     });
 
-
     let day = date.getDate();
-
-    
-
-    console.log(day);
-    
-    // res.send("Hello");
+    // console.log(day);
 });
 
 app.post('/', (req, res) =>{
     
-    let item = req.body.newItem;
+    let itemName = req.body.newItem;
     let listName = req.body.list;
 
-    if (listName === "Work List") {
-        workItems.push(item);
-        res.redirect("/work");
-    } else {
-        items.push(item);
-        res.redirect("/");
-    }
+    //retrieves new item input from form and creates new document in DB collection
+    const newItem = new Item ({
+        name: itemName
+    })
 
+    newItem.save();
+    res.redirect("/");
+    console.log(newItem)
 })
 
 //work list page
