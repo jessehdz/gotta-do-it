@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const _ = require("lodash");
 const date = require(__dirname + "/date.js");
 
 const app = express();
@@ -43,9 +44,14 @@ const item3 = new Item ({
 //array of items
 const defaultItems = [item1, item2, item3];
 
+//custom list schema (connecting items to new lists)
+const listSchema = {
+    name: String,
+    items: [itemsSchema]
+}
 
-
-
+//mongoose model
+const List = mongoose.model("List", listSchema);
 
 //read/render items already added to list
 // Item.find({}, function(err, results){
@@ -104,12 +110,44 @@ app.post('/', (req, res) =>{
     console.log(newItem)
 })
 
-//work list page
-app.get("/work", (req, res) => {
-    res.render("list", {
-        listTitle: "Work List", 
-        newListItems: workItems });
+//dynamic route parameters
+app.get("/:listName", (req, res) => {
+    const newListName = _.startCase(req.params.listName);
+
+    List.findOne({name: newListName}, function(err, foundList){
+
+        
+            if(!foundList){ 
+                //create new list
+                const list = new List({
+                    name: newListName,
+                    items: defaultItems
+                });
+            
+                list.save();
+
+                res.redirect("/" + newListName);
+                
+                console.log("List doesn't exist. " + newListName + " list created.");
+            } else {
+                //show existing list
+                res.render("list", {
+                    listTitle: newListName,
+                    newListItems: foundList.items
+                });
+                console.log("List '" + newListName + "' exists");
+
+                
+            }
+    });  
 });
+
+    
+
+    // res.render("list", {
+    //     listTitle: newListName, 
+    //     newListItems: workItems });
+// });
 
 app.post("/work", (req, res) => {
     let item = req.body.newItem;
