@@ -158,19 +158,33 @@ app.get("/:listName", (req, res) => {
 //deleted items page -----------------------------------------------
 app.post("/delete", function(req, res) {
     const deletedID = req.body.checkBox;
-    
-    //delete documents in collection
-    Item.findByIdAndRemove({_id: deletedID }, function(err){
-        if(err){
-            console.log(err);
-        } else {
-            console.log("Succesfully removed item " + deletedID + " from the todo list");
-            res.redirect("/");
-        }
-    })
-    
+    const listName = req.body.listName;
+
+    if (listName === day) {
+
+        //delete documents in collection for 'home' list
+        Item.findByIdAndRemove({_id: deletedID }, function(err){
+            if(err){
+                console.log(err);
+            } else {
+                console.log("Succesfully removed item " + deletedID + " from the " + day + " list");
+                res.redirect("/");
+            }
+        })
+
+    } else {
+        //delete documents in collection for 'custom' list
+        //find matching list
+        List.findOneAndUpdate({name: listName}, {$pull: {items: {_id: deletedID}}}, function(err, foundList){
+
+            if(!err){
+                console.log("Succesfully removed item " + deletedID + " from the " + listName + " list");
+                res.redirect("/" + listName);
+            } 
+        });
+
     console.log(deletedID);
-});
+}});
 
 //PORT setup for Heroku app setup
 const PORT = process.env.PORT || 3000;
